@@ -1,14 +1,19 @@
 ﻿using System;
 using System.Device.Gpio;
 using System.Threading;
-using Iot.Device.CpuTemperature;
 using System.Runtime.InteropServices;
+using TestPi.Sensoring;
 
 namespace TestPi.ConsoleApp
 {
     class Program
     {
-        static CpuTemperature CPUTemperatureSensor { get; set; } = new CpuTemperature();
+        static ICpuSensors CpuSensors { get; set; }
+
+        public Program()
+        {
+            CpuSensors = new CpuSensors();
+        }
 
         static void Main(string[] args)
         {
@@ -65,10 +70,7 @@ namespace TestPi.ConsoleApp
                 controller.Write(led4, PinValue.Low);
                 Thread.Sleep(dimTimeInMilliseconds);
 
-                if (CPUTemperatureSensor.IsAvailable)
-                {
-                    Console.WriteLine($"The CPU temperature (Celsius) is {CPUTemperatureSensor.Temperature.Celsius}");
-                }
+                Console.WriteLine($"The CPU temperature (Celsius) is {CpuSensors.GetCurrentTemperatureInCelsius()}");
             } 
         }
     }

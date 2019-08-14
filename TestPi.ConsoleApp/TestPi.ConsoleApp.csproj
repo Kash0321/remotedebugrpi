@@ -6,9 +6,12 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Iot.Device.Bindings" Version="0.1.0-prerelease.19376.1" />
     <PackageReference Include="System.Device.Gpio" Version="0.1.0-prerelease.19376.1" />
     <PackageReference Include="System.Drawing.Common" Version="4.6.0-preview7.19362.9" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\TestPi.Sensoring\TestPi.Sensoring.csproj" />
   </ItemGroup>
 
 </Project>
