@@ -8,12 +8,7 @@ namespace TestPi.ConsoleApp
 {
     class Program
     {
-        static ICpuSensors CpuSensors { get; set; }
-
-        public Program()
-        {
-            CpuSensors = new CpuSensors();
-        }
+        static ICpuSensors CpuSensors { get; set; } = new CpuSensors();
 
         static void Main(string[] args)
         {
