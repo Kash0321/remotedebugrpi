@@ -9,7 +9,7 @@ namespace TestPi.ConsoleApp
     {
         static ICpuSensors CpuSensors { get; set; } = new CpuSensors();
 
-        static ILedArrayController LedArrayController { get; set; } = new ExplorerHatLedArrayController();
+        static ILedArrayController LedArrayController { get; set; } = new ExplorerHATLedArrayController();
 
         static void Main(string[] args)
         {
@@ -28,10 +28,10 @@ namespace TestPi.ConsoleApp
 
             while (true)
             {
-                LedArrayController.Blink("Green", lightTimeInMilliseconds, dimTimeInMilliseconds);
-                LedArrayController.Blink("Red", lightTimeInMilliseconds, dimTimeInMilliseconds);
-                LedArrayController.Blink("Yellow", lightTimeInMilliseconds, dimTimeInMilliseconds);
-                LedArrayController.Blink("Blue", lightTimeInMilliseconds, dimTimeInMilliseconds);
+                LedArrayController.Blink("green", lightTimeInMilliseconds, dimTimeInMilliseconds);
+                LedArrayController.Blink("red", lightTimeInMilliseconds, dimTimeInMilliseconds);
+                LedArrayController.Blink("yellow", lightTimeInMilliseconds, dimTimeInMilliseconds);
+                LedArrayController.Blink("blue", lightTimeInMilliseconds, dimTimeInMilliseconds);
 
                 Console.WriteLine($"The CPU temperature (Celsius) is {CpuSensors.GetCurrentTemperatureInCelsius()}");
             } 

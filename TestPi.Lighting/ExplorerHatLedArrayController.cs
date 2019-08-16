@@ -8,13 +8,15 @@ using System.Threading;
 namespace TestPi.Lighting
 {
     /// <summary>
-    /// Implementa <see cref="ILedArrayController" /> para el ExplorerHat de Pimoroni
+    /// Implementa <see cref="ILedArrayController" /> para el ExplorerHat de Pimoroni mediante 
+    /// <see cref="https://github.com/dotnet/iot">DotNet IoT</see> 
     /// </summary>
-    public class ExplorerHatLedArrayController : ILedArrayController
+    public class ExplorerHATLedArrayController : ILedArrayController
     {
-        List<Led> LedArrayList { get; set; } = new List<Led>();
-        GpioController GPIOController { get; set; } = new GpioController();
+        protected List<Led> LedArrayList { get; set; } = new List<Led>();
+        protected GpioController GpioController { get; set; } = new GpioController();
 
+        /// <inheritdoc />
         public IReadOnlyCollection<Led> LedArray 
         {
             get
@@ -23,6 +25,7 @@ namespace TestPi.Lighting
             }
         }
 
+        /// <inheritdoc />
         public void Blink(string ledName, int lightTimeInMilliseconds, int dimTimeInMilliseconds, int steps = 1)
         {
             var led = LedArrayList.Where(l => l.Name == ledName).SingleOrDefault();
@@ -30,6 +33,7 @@ namespace TestPi.Lighting
             Blink(led, lightTimeInMilliseconds, dimTimeInMilliseconds, steps);
         }
 
+        /// <inheritdoc />
         public void Blink(int ledNumber, int lightTimeInMilliseconds, int dimTimeInMilliseconds, int steps = 1)
         {
             var led = LedArrayList.Where(l => l.Number == ledNumber).SingleOrDefault();
@@ -37,32 +41,37 @@ namespace TestPi.Lighting
             Blink(led, lightTimeInMilliseconds, dimTimeInMilliseconds, steps);
         }
 
+        /// <inheritdoc />
         public void Blink(Led led, int lightTimeInMilliseconds, int dimTimeInMilliseconds, int steps)
         {            
-            if (!GPIOController.IsPinOpen(led.Pin) || GPIOController.GetPinMode(led.Pin) != PinMode.Output)
+            if (!GpioController.IsPinOpen(led.Pin) || GpioController.GetPinMode(led.Pin) != PinMode.Output)
             {
-                GPIOController.OpenPin(led.Pin, PinMode.Output);
+                GpioController.OpenPin(led.Pin, PinMode.Output);
             }
 
             for (int i = 0; i < steps; i++)
             {
                 Console.WriteLine($"Light {led.Name} for {lightTimeInMilliseconds}ms");
-                GPIOController.Write(led.Pin, PinValue.High);
+                GpioController.Write(led.Pin, PinValue.High);
                 Thread.Sleep(lightTimeInMilliseconds);
                 Console.WriteLine($"Dim {led.Name} for {dimTimeInMilliseconds}ms");
-                GPIOController.Write(led.Pin, PinValue.Low);
+                GpioController.Write(led.Pin, PinValue.Low);
                 Thread.Sleep(dimTimeInMilliseconds);
             }
         }
 
-        public ExplorerHatLedArrayController()
+        /// <summary>
+        /// Inicializa una instancia de <see cref="ExplorerHATLedArrayController" />.
+        /// Configura los 4 leds incluidos en el Explorer HAT
+        /// </summary>
+        public ExplorerHATLedArrayController()
         { 
             LedArrayList = new List<Led>() 
             { 
-                new Led(1, "Blue", 4), 
-                new Led(1, "Yellow", 17), 
-                new Led(1, "Red", 27), 
-                new Led(1, "Green", 5) 
+                new Led(1, "blue", 4), 
+                new Led(2, "yellow", 17), 
+                new Led(3, "red", 27), 
+                new Led(4, "green", 5) 
             };
         }
     }
