@@ -60,6 +60,61 @@ namespace TestPi.Lighting
             }
         }
 
+        /// <inheritdoc />
+        public void SwitchOn(int ledNumber)
+        {
+            var led = LedArrayList.Where(l => l.Number == ledNumber).SingleOrDefault();
+
+            SwitchOn(led);
+        }
+
+        /// <inheritdoc />
+
+        public void SwitchOff(int ledNumber)
+        {
+            var led = LedArrayList.Where(l => l.Number == ledNumber).SingleOrDefault();
+
+            SwitchOff(led);
+        }
+
+        /// <inheritdoc />
+        public void SwitchOn(string ledName)
+        {
+            var led = LedArrayList.Where(l => l.Name == ledName).SingleOrDefault();
+
+            SwitchOn(led);
+        }
+
+        /// <inheritdoc />
+        public void SwitchOff(string ledName)
+        {
+            var led = LedArrayList.Where(l => l.Name == ledName).SingleOrDefault();
+
+            SwitchOff(led);
+        }
+
+        void SwitchOn(Led led)
+        {            
+            if (!GpioController.IsPinOpen(led.Pin) || GpioController.GetPinMode(led.Pin) != PinMode.Output)
+            {
+                GpioController.OpenPin(led.Pin, PinMode.Output);
+            }
+
+            GpioController.Write(led.Pin, PinValue.High);
+            Console.WriteLine($"{led.Name} switched ON");
+        }
+
+        void SwitchOff(Led led)
+        {            
+            if (!GpioController.IsPinOpen(led.Pin) || GpioController.GetPinMode(led.Pin) != PinMode.Output)
+            {
+                GpioController.OpenPin(led.Pin, PinMode.Output);
+            }
+
+            GpioController.Write(led.Pin, PinValue.Low);
+            Console.WriteLine($"{led.Name} switched OFF");
+        }
+
         /// <summary>
         /// Inicializa una instancia de <see cref="ExplorerHATLedArrayController" />.
         /// Configura los 4 leds incluidos en el Explorer HAT

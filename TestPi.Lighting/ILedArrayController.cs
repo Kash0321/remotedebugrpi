@@ -29,5 +29,29 @@ namespace TestPi.Lighting
         /// <param name="dimTimeInMilliseconds">Milisegundos en los que el led está apagado en cada parpadeo</param>
         /// <param name="steps">Número de parpadeos a ejecutar</param>
         void Blink(int ledNumber, int lightTimeInMilliseconds, int dimTimeInMilliseconds, int steps = 1);
+
+        /// <summary>
+        /// Enciende el led
+        /// </summary>
+        /// <param name="ledNumber">Número asociado al led que se ha de encender</param>
+        void SwitchOn(int ledNumber);
+
+        /// <summary>
+        /// Apaga el led
+        /// </summary>
+        /// <param name="ledNumber">Número asociado al led que se ha de apagar</param>
+        void SwitchOff(int ledNumber);
+
+        /// <summary>
+        /// Enciende el led
+        /// </summary>
+        /// <param name="ledName">Nombre asociado al led que se ha de encender</param>
+        void SwitchOn(string ledName);
+
+        /// <summary>
+        /// Apaga el led
+        /// </summary>
+        /// <param name="ledName">Nombre asociado al led que se ha de apagar</param>
+        void SwitchOff(string ledName);
     }
 }
