@@ -88,26 +88,38 @@ namespace TestPi.Lighting
             SwitchOff(led);
         }
 
-        void SwitchOn(Led led)
-        {            
-            if (!GpioController.IsPinOpen(led.Pin) || GpioController.GetPinMode(led.Pin) != PinMode.Output)
+        void EnsureOpenPin(Led led, PinMode pinMode)
+        {
+            if (!GpioController.IsPinOpen(led.Pin) || GpioController.GetPinMode(led.Pin) != pinMode)
             {
-                GpioController.OpenPin(led.Pin, PinMode.Output);
+                if (GpioController.IsPinOpen(led.Pin))
+                {
+                    GpioController.ClosePin(led.Pin);
+                }
+                GpioController.OpenPin(led.Pin, pinMode);
             }
+        }
 
-            GpioController.Write(led.Pin, PinValue.High);
-            Console.WriteLine($"{led.Name} switched ON");
+        void SwitchOn(Led led)
+        {
+            if (!led.IsOn)
+            {
+                EnsureOpenPin(led, PinMode.Output);
+                GpioController.Write(led.Pin, PinValue.High);
+                Console.WriteLine($"{led.Name} switched ON");
+                led.IsOn = true;
+            }
         }
 
         void SwitchOff(Led led)
-        {            
-            if (!GpioController.IsPinOpen(led.Pin) || GpioController.GetPinMode(led.Pin) != PinMode.Output)
+        {
+            if (led.IsOn)
             {
-                GpioController.OpenPin(led.Pin, PinMode.Output);
+                EnsureOpenPin(led, PinMode.Output);
+                GpioController.Write(led.Pin, PinValue.Low);
+                Console.WriteLine($"{led.Name} switched OFF");
+                led.IsOn = false;
             }
-
-            GpioController.Write(led.Pin, PinValue.Low);
-            Console.WriteLine($"{led.Name} switched OFF");
         }
 
         Led GetLed(string name)
