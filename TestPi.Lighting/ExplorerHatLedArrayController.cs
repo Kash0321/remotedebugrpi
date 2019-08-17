@@ -107,7 +107,7 @@ namespace TestPi.Lighting
             {
                 EnsureOpenPin(led, PinMode.Output);
                 GpioController.Write(led.Pin, PinValue.High);
-                Log.Information("{Led} switched ON", led);
+                Log.Information("Led {Led} switched ON", led);
                 led.IsOn = true;
             }
         }
@@ -118,7 +118,7 @@ namespace TestPi.Lighting
             {
                 EnsureOpenPin(led, PinMode.Output);
                 GpioController.Write(led.Pin, PinValue.Low);
-                Log.Information("{Led} switched OFF", led);
+                Log.Information("Led {Led} switched OFF", led);
                 led.IsOn = false;
             }
         }
