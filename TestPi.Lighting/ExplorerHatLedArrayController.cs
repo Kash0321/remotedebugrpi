@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading;
+using Serilog;
 
 namespace TestPi.Lighting
 {
@@ -46,10 +47,10 @@ namespace TestPi.Lighting
         {            
             for (int i = 0; i < steps; i++)
             {
-                Console.WriteLine($"Light {led.Name} for {lightTimeInMilliseconds}ms");
+                Log.Information("Light {Led} for {@lightTimeInMilliseconds}ms", led, lightTimeInMilliseconds);
                 SwitchOn(led);
                 Thread.Sleep(lightTimeInMilliseconds);
-                Console.WriteLine($"Dim {led.Name} for {dimTimeInMilliseconds}ms");
+                Log.Information("Dim {Led} for {@dimTimeInMilliseconds}ms", led, dimTimeInMilliseconds);
                 SwitchOff(led);
                 Thread.Sleep(dimTimeInMilliseconds);
             }
@@ -106,7 +107,7 @@ namespace TestPi.Lighting
             {
                 EnsureOpenPin(led, PinMode.Output);
                 GpioController.Write(led.Pin, PinValue.High);
-                Console.WriteLine($"{led.Name} switched ON");
+                Log.Information("{Led} switched ON", led);
                 led.IsOn = true;
             }
         }
@@ -117,7 +118,7 @@ namespace TestPi.Lighting
             {
                 EnsureOpenPin(led, PinMode.Output);
                 GpioController.Write(led.Pin, PinValue.Low);
-                Console.WriteLine($"{led.Name} switched OFF");
+                Log.Information("{Led} switched OFF", led);
                 led.IsOn = false;
             }
         }
@@ -128,7 +129,8 @@ namespace TestPi.Lighting
 
             if (led is null)
             {
-                throw new Exception($"Led array has not a led named '{name}'");
+                var ex = new Exception($"Led array has not a led named '{name}'");
+                Log.Error(ex, "Error getting led from array");
             }
 
             return led;
@@ -140,7 +142,8 @@ namespace TestPi.Lighting
 
             if (led is null)
             {
-                throw new Exception($"Led array has not a led identified with #{number}");
+                var ex = new Exception($"Led array has not a led identified with #{number}");
+                Log.Error(ex, "Error getting led from array");
             }
 
             return led;
@@ -159,6 +162,8 @@ namespace TestPi.Lighting
                 new Led(3, "red", 27), 
                 new Led(4, "green", 5) 
             };
+
+            Log.Information("Led array (Pimoroni ExplorerHAT on Raspberry PI) initialized: {@LedArrayList}", LedArrayList);
         }
     }
 }

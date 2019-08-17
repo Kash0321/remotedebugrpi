@@ -42,5 +42,10 @@ namespace TestPi.Lighting
             Pin = pin;
             IsOn = false;
         }
+
+        public override string ToString()
+        {
+            return $"[{Number}/{Name}]";
+        }
     }
 }

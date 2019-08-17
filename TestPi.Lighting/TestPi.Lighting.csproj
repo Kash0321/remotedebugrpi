@@ -5,6 +5,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Serilog" Version="2.8.0" />
     <PackageReference Include="System.Device.Gpio" Version="1.0.0-prerelease.19413.1" />
   </ItemGroup>
 

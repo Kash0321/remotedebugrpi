@@ -3,6 +3,7 @@ using System.Runtime.InteropServices;
 using TestPi.Sensoring;
 using TestPi.Lighting;
 using System.Threading;
+using Serilog;
 
 namespace TestPi.ConsoleApp
 {
@@ -14,6 +15,11 @@ namespace TestPi.ConsoleApp
 
         static void Main(string[] args)
         {
+            // Logging configuration
+            Log.Logger = new LoggerConfiguration()
+                .WriteTo.Console()
+                .CreateLogger();
+
             // Time variables
             var lightTimeInMilliseconds = 1000;
             var dimTimeInMilliseconds = 100;
@@ -77,7 +83,7 @@ namespace TestPi.ConsoleApp
                     Thread.Sleep(dimTimeInMilliseconds);
                 }
 
-                Console.WriteLine($"The CPU temperature (Celsius) is {CpuSensors.GetCurrentTemperatureInCelsius()}");
+                Log.Information("The CPU temperature (Celsius) is {Temperature}", CpuSensors.GetCurrentTemperatureInCelsius());
             } 
         }
     }
