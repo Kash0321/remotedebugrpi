@@ -28,7 +28,7 @@ namespace TestPi.Lighting
         /// <inheritdoc />
         public void Blink(string ledName, int lightTimeInMilliseconds, int dimTimeInMilliseconds, int steps = 1)
         {
-            var led = LedArrayList.Where(l => l.Name == ledName).SingleOrDefault();
+            var led = GetLed(ledName);
 
             Blink(led, lightTimeInMilliseconds, dimTimeInMilliseconds, steps);
         }
@@ -36,7 +36,7 @@ namespace TestPi.Lighting
         /// <inheritdoc />
         public void Blink(int ledNumber, int lightTimeInMilliseconds, int dimTimeInMilliseconds, int steps = 1)
         {
-            var led = LedArrayList.Where(l => l.Number == ledNumber).SingleOrDefault();
+            var led = GetLed(ledNumber);
 
             Blink(led, lightTimeInMilliseconds, dimTimeInMilliseconds, steps);
         }
@@ -44,18 +44,13 @@ namespace TestPi.Lighting
         /// <inheritdoc />
         public void Blink(Led led, int lightTimeInMilliseconds, int dimTimeInMilliseconds, int steps)
         {            
-            if (!GpioController.IsPinOpen(led.Pin) || GpioController.GetPinMode(led.Pin) != PinMode.Output)
-            {
-                GpioController.OpenPin(led.Pin, PinMode.Output);
-            }
-
             for (int i = 0; i < steps; i++)
             {
                 Console.WriteLine($"Light {led.Name} for {lightTimeInMilliseconds}ms");
-                GpioController.Write(led.Pin, PinValue.High);
+                SwitchOn(led);
                 Thread.Sleep(lightTimeInMilliseconds);
                 Console.WriteLine($"Dim {led.Name} for {dimTimeInMilliseconds}ms");
-                GpioController.Write(led.Pin, PinValue.Low);
+                SwitchOff(led);
                 Thread.Sleep(dimTimeInMilliseconds);
             }
         }
@@ -63,7 +58,7 @@ namespace TestPi.Lighting
         /// <inheritdoc />
         public void SwitchOn(int ledNumber)
         {
-            var led = LedArrayList.Where(l => l.Number == ledNumber).SingleOrDefault();
+            var led = GetLed(ledNumber);
 
             SwitchOn(led);
         }
@@ -72,7 +67,7 @@ namespace TestPi.Lighting
 
         public void SwitchOff(int ledNumber)
         {
-            var led = LedArrayList.Where(l => l.Number == ledNumber).SingleOrDefault();
+            var led = GetLed(ledNumber);
 
             SwitchOff(led);
         }
@@ -80,7 +75,7 @@ namespace TestPi.Lighting
         /// <inheritdoc />
         public void SwitchOn(string ledName)
         {
-            var led = LedArrayList.Where(l => l.Name == ledName).SingleOrDefault();
+            var led = GetLed(ledName);
 
             SwitchOn(led);
         }
@@ -88,7 +83,7 @@ namespace TestPi.Lighting
         /// <inheritdoc />
         public void SwitchOff(string ledName)
         {
-            var led = LedArrayList.Where(l => l.Name == ledName).SingleOrDefault();
+            var led = GetLed(ledName);
 
             SwitchOff(led);
         }
@@ -113,6 +108,30 @@ namespace TestPi.Lighting
 
             GpioController.Write(led.Pin, PinValue.Low);
             Console.WriteLine($"{led.Name} switched OFF");
+        }
+
+        Led GetLed(string name)
+        {
+            var led = LedArrayList.Where(l => l.Name == name).SingleOrDefault();
+
+            if (led is null)
+            {
+                throw new Exception($"Led array has not a led named '{name}'");
+            }
+
+            return led;
+        }
+
+        Led GetLed(int number)
+        {
+            var led = LedArrayList.Where(l => l.Number == number).SingleOrDefault();
+
+            if (led is null)
+            {
+                throw new Exception($"Led array has not a led identified with #{number}");
+            }
+
+            return led;
         }
 
         /// <summary>
