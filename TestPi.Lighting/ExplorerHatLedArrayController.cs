@@ -192,6 +192,8 @@ namespace TestPi.Lighting
         /// </summary>
         public ExplorerHATLedArrayController()
         { 
+            Log.Information("Initializing led array (Pimoroni ExplorerHAT on Raspberry PI)", LedArrayList);
+            
             LedArrayList = new List<Led>() 
             { 
                 new Led(1, "blue", 4), 
@@ -200,7 +202,7 @@ namespace TestPi.Lighting
                 new Led(4, "green", 5) 
             };
 
-            Log.Information("Led array (Pimoroni ExplorerHAT on Raspberry PI) initialized: {@LedArrayList}", LedArrayList);
+            Log.Debug("Led array (Pimoroni ExplorerHAT on Raspberry PI) initialized: {@LedArrayList}", LedArrayList);
         }
     }
 }
