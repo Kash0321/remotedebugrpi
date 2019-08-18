@@ -31,6 +31,14 @@ namespace TestPi.Lighting
         void Blink(int ledNumber, int lightTimeInMilliseconds, int dimTimeInMilliseconds, int steps = 1);
 
         /// <summary>
+        /// Hace parpadear todos los leds del array
+        /// </summary>
+        /// <param name="lightTimeInMilliseconds">Milisegundos en los que el led está encendido en cada parpadeo</param>
+        /// <param name="dimTimeInMilliseconds">Milisegundos en los que el led está apagado en cada parpadeo</param>
+        /// <param name="steps">Número de parpadeos a ejecutar</param>
+        void Blink(int lightTimeInMilliseconds, int dimTimeInMilliseconds, int steps = 1);
+
+        /// <summary>
         /// Enciende el led
         /// </summary>
         /// <param name="ledNumber">Número asociado al led que se ha de encender</param>
@@ -53,5 +61,15 @@ namespace TestPi.Lighting
         /// </summary>
         /// <param name="ledName">Nombre asociado al led que se ha de apagar</param>
         void SwitchOff(string ledName);
+
+        /// <summary>
+        /// Enciende todos los leds del array
+        /// </summary>
+        void SwitchOn();
+
+        /// <summary>
+        /// Apaga todos los leds del array
+        /// </summary>
+        void SwitchOff();
     }
 }

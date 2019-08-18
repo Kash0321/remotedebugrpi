@@ -31,7 +31,7 @@ namespace TestPi.Lighting
         {
             var led = GetLed(ledName);
 
-            Blink(led, lightTimeInMilliseconds, dimTimeInMilliseconds, steps);
+            BlinkLed(lightTimeInMilliseconds, dimTimeInMilliseconds, steps, led);
         }
 
         /// <inheritdoc />
@@ -39,20 +39,38 @@ namespace TestPi.Lighting
         {
             var led = GetLed(ledNumber);
 
-            Blink(led, lightTimeInMilliseconds, dimTimeInMilliseconds, steps);
+            BlinkLed(lightTimeInMilliseconds, dimTimeInMilliseconds, steps, led);
         }
 
         /// <inheritdoc />
-        public void Blink(Led led, int lightTimeInMilliseconds, int dimTimeInMilliseconds, int steps)
+        public void Blink(int lightTimeInMilliseconds, int dimTimeInMilliseconds, int steps = 1)
+        {
+            BlinkLed(lightTimeInMilliseconds, dimTimeInMilliseconds, steps);
+        }
+
+        /// <inheritdoc />
+        public void BlinkLed(int lightTimeInMilliseconds, int dimTimeInMilliseconds, int steps, Led led = null)
         {            
             for (int i = 0; i < steps; i++)
             {
-                Log.Information("Light {Led} for {@lightTimeInMilliseconds}ms", led, lightTimeInMilliseconds);
-                SwitchOn(led);
-                Thread.Sleep(lightTimeInMilliseconds);
-                Log.Information("Dim {Led} for {@dimTimeInMilliseconds}ms", led, dimTimeInMilliseconds);
-                SwitchOff(led);
-                Thread.Sleep(dimTimeInMilliseconds);
+                if (led is null)
+                {
+                    Log.Information("Light all for {@lightTimeInMilliseconds}ms", lightTimeInMilliseconds);
+                    SwitchOn();
+                    Thread.Sleep(lightTimeInMilliseconds);
+                    Log.Information("Dim all for {@dimTimeInMilliseconds}ms", dimTimeInMilliseconds);
+                    SwitchOff();
+                    Thread.Sleep(dimTimeInMilliseconds);
+                }
+                else
+                {
+                    Log.Information("Light {Led} for {@lightTimeInMilliseconds}ms", led, lightTimeInMilliseconds);
+                    SwitchOn(led);
+                    Thread.Sleep(lightTimeInMilliseconds);
+                    Log.Information("Dim {Led} for {@dimTimeInMilliseconds}ms", led, dimTimeInMilliseconds);
+                    SwitchOff(led);
+                    Thread.Sleep(dimTimeInMilliseconds);
+                }
             }
         }
 
@@ -87,6 +105,24 @@ namespace TestPi.Lighting
             var led = GetLed(ledName);
 
             SwitchOff(led);
+        }
+
+        /// <inheritdoc />
+        public void SwitchOn()
+        {
+            foreach (var led in LedArrayList)
+            {
+                SwitchOn(led);
+            }
+        }
+
+        /// <inheritdoc />
+        public void SwitchOff()
+        {
+            foreach (var led in LedArrayList)
+            {
+                SwitchOff(led);
+            }
         }
 
         void EnsureOpenPin(Led led, PinMode pinMode)

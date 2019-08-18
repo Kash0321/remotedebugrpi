@@ -45,6 +45,27 @@
                 ],
                 "debuggerPath": "/home/pi/vsdbg/vsdbg"
             }
+        },
+        {
+            "name": "RE-Publish & .NET Core Launch (remote console)",
+            "type": "coreclr",
+            "request": "launch",
+            "preLaunchTask": "republish",
+            "program": "/home/pi/dotnet/dotnet",
+            "args": ["/home/pi/Work/dotnet/TestPi.ConsoleApp/TestPi.ConsoleApp.dll"],
+            "cwd": "/home/pi/Work/dotnet/TestPi.ConsoleApp",
+            "stopAtEntry": false,
+            "console": "internalConsole",
+            "pipeTransport": {
+                "pipeCwd": "${workspaceFolder}",
+                "pipeProgram": "C:\\work\\putty\\plink.exe", //Ruta hasta la línea de comandos de putty (windows machine)
+                "pipeArgs": [
+                    "-pw",
+                    "raspberry", //Contraseña para el usuario root
+                    "root@harlequin.local" //Usuario (debe ser root) y nombre de host (o IP) de la raspi
+                ],
+                "debuggerPath": "/home/pi/vsdbg/vsdbg"
+            }
         }
     ]
 }

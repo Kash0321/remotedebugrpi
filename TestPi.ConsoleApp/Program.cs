@@ -4,6 +4,8 @@ using TestPi.Sensoring;
 using TestPi.Lighting;
 using System.Threading;
 using Serilog;
+using Serilog.Formatting.Compact;
+
 
 namespace TestPi.ConsoleApp
 {
@@ -68,20 +70,9 @@ namespace TestPi.ConsoleApp
                 LedArrayController.SwitchOff("blue");
                 Thread.Sleep(progressSwitchOnOffTimeInMilliseconds);
                 
-                for (int i = 0; i < 5; i++)
-                {
-                    LedArrayController.SwitchOn(1);
-                    LedArrayController.SwitchOn(2);
-                    LedArrayController.SwitchOn(3);
-                    LedArrayController.SwitchOn(4);
-                    Thread.Sleep(lightTimeInMilliseconds);
+                LedArrayController.Blink(lightTimeInMilliseconds, dimTimeInMilliseconds, 5);
 
-                    LedArrayController.SwitchOff(1);
-                    LedArrayController.SwitchOff(2);
-                    LedArrayController.SwitchOff(3);
-                    LedArrayController.SwitchOff(4);
-                    Thread.Sleep(dimTimeInMilliseconds);
-                }
+                LedArrayController.Blink(fastBlinkingTimeInMilliseconds, fastBlinkingTimeInMilliseconds, 5);
 
                 Log.Information("The CPU temperature (Celsius) is {Temperature}", CpuSensors.GetCurrentTemperatureInCelsius());
             } 
