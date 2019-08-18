@@ -4,7 +4,6 @@ using TestPi.Sensoring;
 using TestPi.Lighting;
 using System.Threading;
 using Serilog;
-using Serilog.Formatting.Compact;
 
 
 namespace TestPi.ConsoleApp
