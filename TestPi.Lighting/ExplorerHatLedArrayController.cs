@@ -50,24 +50,25 @@ namespace TestPi.Lighting
 
         /// <inheritdoc />
         public void BlinkLed(int lightTimeInMilliseconds, int dimTimeInMilliseconds, int steps, Led led = null)
-        {            
+        {
+            Log.Information("Blink {ledInfo} {lightTimeInMilliseconds}ms, {dimTimeInMilliseconds}ms, {steps} times", led is null ? "all leds" : led.ToString(), lightTimeInMilliseconds, dimTimeInMilliseconds, steps);
             for (int i = 0; i < steps; i++)
             {
                 if (led is null)
                 {
-                    Log.Information("Light all for {@lightTimeInMilliseconds}ms", lightTimeInMilliseconds);
+                    Log.Debug("Light all for {@lightTimeInMilliseconds}ms", lightTimeInMilliseconds);
                     SwitchOn();
                     Thread.Sleep(lightTimeInMilliseconds);
-                    Log.Information("Dim all for {@dimTimeInMilliseconds}ms", dimTimeInMilliseconds);
+                    Log.Debug("Dim all for {@dimTimeInMilliseconds}ms", dimTimeInMilliseconds);
                     SwitchOff();
                     Thread.Sleep(dimTimeInMilliseconds);
                 }
                 else
                 {
-                    Log.Information("Light {Led} for {@lightTimeInMilliseconds}ms", led, lightTimeInMilliseconds);
+                    Log.Debug("Light {Led} for {@lightTimeInMilliseconds}ms", led, lightTimeInMilliseconds);
                     SwitchOn(led);
                     Thread.Sleep(lightTimeInMilliseconds);
-                    Log.Information("Dim {Led} for {@dimTimeInMilliseconds}ms", led, dimTimeInMilliseconds);
+                    Log.Debug("Dim {Led} for {@dimTimeInMilliseconds}ms", led, dimTimeInMilliseconds);
                     SwitchOff(led);
                     Thread.Sleep(dimTimeInMilliseconds);
                 }
@@ -143,7 +144,7 @@ namespace TestPi.Lighting
             {
                 EnsureOpenPin(led, PinMode.Output);
                 GpioController.Write(led.Pin, PinValue.High);
-                Log.Information("Led {Led} switched ON", led);
+                Log.Debug("Led {Led} switched ON", led);
                 led.IsOn = true;
             }
         }
@@ -154,7 +155,7 @@ namespace TestPi.Lighting
             {
                 EnsureOpenPin(led, PinMode.Output);
                 GpioController.Write(led.Pin, PinValue.Low);
-                Log.Information("Led {Led} switched OFF", led);
+                Log.Debug("Led {Led} switched OFF", led);
                 led.IsOn = false;
             }
         }

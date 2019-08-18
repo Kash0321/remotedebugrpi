@@ -19,6 +19,7 @@ namespace TestPi.ConsoleApp
         {
             // Logging configuration
             Log.Logger = new LoggerConfiguration()
+                .MinimumLevel.Verbose()
                 .WriteTo.Console()
                 .CreateLogger();
 
@@ -26,7 +27,8 @@ namespace TestPi.ConsoleApp
             var lightTimeInMilliseconds = 1000;
             var dimTimeInMilliseconds = 100;
             var fastBlinkingTimeInMilliseconds = 100;
-            var fastBlinkingCount = 5;
+            var shortBlinkingCount = 4;
+            var longBlinkingCount = 8;
             var progressSwitchOnOffTimeInMilliseconds = 1000;
 
             // Priting OS INFO
@@ -47,10 +49,14 @@ namespace TestPi.ConsoleApp
                 LedArrayController.Blink("red", lightTimeInMilliseconds, dimTimeInMilliseconds);
                 LedArrayController.Blink("green", lightTimeInMilliseconds, dimTimeInMilliseconds);
                 
-                LedArrayController.Blink(1, fastBlinkingTimeInMilliseconds, fastBlinkingTimeInMilliseconds, fastBlinkingCount);
-                LedArrayController.Blink(2, fastBlinkingTimeInMilliseconds, fastBlinkingTimeInMilliseconds, fastBlinkingCount);
-                LedArrayController.Blink(3, fastBlinkingTimeInMilliseconds, fastBlinkingTimeInMilliseconds, fastBlinkingCount);
-                LedArrayController.Blink(4, fastBlinkingTimeInMilliseconds, fastBlinkingTimeInMilliseconds, fastBlinkingCount);
+                LedArrayController.Blink(1, fastBlinkingTimeInMilliseconds, fastBlinkingTimeInMilliseconds, shortBlinkingCount);
+                LedArrayController.Blink(2, fastBlinkingTimeInMilliseconds, fastBlinkingTimeInMilliseconds, shortBlinkingCount);
+                LedArrayController.Blink(3, fastBlinkingTimeInMilliseconds, fastBlinkingTimeInMilliseconds, shortBlinkingCount);
+                LedArrayController.Blink(4, fastBlinkingTimeInMilliseconds, fastBlinkingTimeInMilliseconds, shortBlinkingCount);
+                
+                LedArrayController.Blink(lightTimeInMilliseconds, dimTimeInMilliseconds, 5);
+
+                LedArrayController.Blink(fastBlinkingTimeInMilliseconds, fastBlinkingTimeInMilliseconds, longBlinkingCount);
 
                 LedArrayController.SwitchOn(1);
                 Thread.Sleep(progressSwitchOnOffTimeInMilliseconds);
@@ -69,10 +75,6 @@ namespace TestPi.ConsoleApp
                 Thread.Sleep(progressSwitchOnOffTimeInMilliseconds);
                 LedArrayController.SwitchOff("blue");
                 Thread.Sleep(progressSwitchOnOffTimeInMilliseconds);
-                
-                LedArrayController.Blink(lightTimeInMilliseconds, dimTimeInMilliseconds, 5);
-
-                LedArrayController.Blink(fastBlinkingTimeInMilliseconds, fastBlinkingTimeInMilliseconds, 5);
 
                 Log.Information("The CPU temperature (Celsius) is {Temperature}", CpuSensors.GetCurrentTemperatureInCelsius());
             } 
