@@ -1,5 +1,7 @@
 # Instalación del SDK de .NET Core
 
+[Volver al readme.md](/readme.md)
+
 He extraído los pasos de [este post de Scott Hanselman](https://www.hanselman.com/blog/InstallingTheNETCore2xSDKOnARaspberryPiAndBlinkingAnLEDWithSystemDeviceGpio.aspx), los recopilo a continuación:
 
 1. Instalar algunos paquetes necesarios (requisitos previos, una sola vez)
@@ -58,3 +60,5 @@ He extraído los pasos de [este post de Scott Hanselman](https://www.hanselman.c
     To install additional .NET Core runtimes or SDKs:
     https://aka.ms/dotnet-download
     ```
+
+    [Volver al readme.md](/readme.md)
