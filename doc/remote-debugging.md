@@ -109,7 +109,7 @@ Ahora que estamos conectados:
     sudo passwd root
     ```
 
-    Durante la ejecución, nos pide la nueva contraseña a establecer al usuario root. Para facilitar la explicación de algunos pasos más adelante, le he asignado como contraseña ```raspberry```, recordémosla porque la utilizaremos dentro de un rato.
+    Durante la ejecución, nos pide la nueva contraseña a establecer al usuario root. Para facilitar la explicación de algunos pasos más adelante, le he asignado como contraseña `raspberry`, recordémosla porque la utilizaremos dentro de un rato.
 
     ```
     pi@harlequin:~ $ sudo passwd root
@@ -139,11 +139,11 @@ Ahora que estamos conectados:
 ## En el equipo con Visual Studio Code instalado
 Ya tenemos la Raspberry Pi preparada, vamos ahora con el equipo en el que vamos a trabajar, y que tendrá disponible: 
 
-- [Visual Studio Code](https://code.visualstudio.com), con [la extensión de C#](https://marketplace.visualstudio.com/items?itemName=ms-vscode.csharp) instalda
+- [Visual Studio Code](https://code.visualstudio.com), con [la extensión de C#](https://marketplace.visualstudio.com/items?itemName=ms-vscode.csharp) instalada
 
 - La misma versión del [SDK .NET Core](https://dotnet.microsoft.com/download) instalada que la Raspberry Pi
 
-Visual Studio Code es un editor de código multiplataforma (Windows Linux y MacOS), creado or Microsoft, con un conjunto de extensiones inmenso que permiten convertirlo en un entorno de desarrollo bastante potente, en particular para .NET Core, pero no se limita a este ecosistema, y soporta una enorme cantidad de lenguajes y frameworks, desde un PC/Mac cualquiera.
+Visual Studio Code es un editor de código multiplataforma (Windows Linux y MacOS), creado por Microsoft, con un conjunto de extensiones inmenso que permiten convertirlo en un entorno de desarrollo bastante potente, en particular para .NET Core, pero no se limita a este ecosistema, y soporta una enorme cantidad de lenguajes y frameworks, desde un PC/Mac cualquiera.
 
 No olvidemos que nuestro objetivo es depurar aplicaciones que desarrollamos con la intención de ejecutarse en un dispositivo distinto, la Raspberry Pi, con un hardware muy particular y diferente al sistema desde el que estamos trabajando.
 
@@ -151,7 +151,7 @@ Para ilustrar los pasos que restan, en [este repositorio](https://github.com/Kas
 
 Para poder depurar el código, lo primero que tenemos que hacer es publicarlo en la Raspberry Pi. Para eso, necesitamos:
 
-1. Lanzar el comando [```dotnet publish```](https://docs.microsoft.com/es-es/dotnet/core/tools/dotnet-publish) para un entorno de tiempo de ejecución (runtime) específico, en este caso ```linux-arm```, que es el entorno de ejecución de la Raspberry Pi, podríamos establecer muchas más opciones, pero si tenemos sincronizados los frameworks por defecto entre el equipo de desarrollo y el de ejecución no va  aser necesario (gustaos todo lo que queráis...). Este comando compila la aplicación, lee sus dependencias especificadas en el archivo de proyecto y publica el conjunto resultante de archivos en un directorio.
+1. Lanzar el comando [`dotnet publish`](https://docs.microsoft.com/es-es/dotnet/core/tools/dotnet-publish) para un entorno de tiempo de ejecución (runtime) específico, en este caso `linux-arm`, que es el entorno de ejecución de la Raspberry Pi, podríamos establecer muchas más opciones, pero si tenemos sincronizados los frameworks por defecto entre el equipo de desarrollo y el de ejecución no va  aser necesario (gustaos todo lo que queráis...). Este comando compila la aplicación, lee sus dependencias especificadas en el archivo de proyecto y publica el conjunto resultante de archivos en un directorio.
 
     ```
     dotnet publish -r linux-arm
@@ -166,7 +166,7 @@ Para poder depurar el código, lo primero que tenemos que hacer es publicarlo en
     popd
     ```
 
-3. Ahora tenemos que añadir dos cosas a la carpeta ```.vscode``` dentro del proyecto, un fichero ```launch.json``` para configurar la preparación de la depuración y algunas tareas en el fichero ```tasks.json``` para gestionarlo todo (VSCode lo suele generar automáticamente cuando intentas depurar -F5- una aplicación) 
+3. Ahora tenemos que añadir dos cosas a la carpeta `.vscode` dentro del proyecto, un fichero `launch.json` para configurar la preparación de la depuración y algunas tareas en el fichero `tasks.json` para gestionarlo todo (VSCode lo suele generar automáticamente cuando intentas depurar vía -F5- una aplicación) 
 
     ![configfiles](https://user-images.githubusercontent.com/10654401/63650065-a3210880-c746-11e9-815e-dc6347388c47.png)
 
@@ -185,7 +185,7 @@ Para poder depurar el código, lo primero que tenemos que hacer es publicarlo en
                 "preLaunchTask": "publish",
                 "program": "/home/pi/dotnet/dotnet",
                 "args": ["/home/pi/Work/dotnet/TestPi.ConsoleApp/TestPi.ConsoleApp.dll"], //Ruta remota a la dll que arranca el código que vamos a depurar
-                "cwd": "/home/pi/Work/dotnet/TestPi.ConsoleApp", //Ruta en la Raspberry Pi al deirectorio de ejecución
+                "cwd": "/home/pi/Work/dotnet/TestPi.ConsoleApp", //Ruta en la Raspberry Pi al directorio de ejecución
                 "stopAtEntry": false,
                 "console": "internalConsole",
                 "pipeTransport": {
@@ -247,9 +247,9 @@ El efecto final de esto, es que cuando queremos depurar nuestro código, pulsamo
 
 ## Y una optimización de regalo
 
-Casi todo esto estaba en los posts de Scott Hanselman, sólo lo he ampliado con más detalle y algunas ilustraciones, pero pronto me di cuenta de que hacía falta un ajuste para optimizar el trabajo: 
+Casi todo esto estaba en los posts de Scott Hanselman, sólo lo he ampliado, con más detalles y algunas ilustraciones, pero pronto me di cuenta de que hacía falta un ajuste para optimizar el trabajo: 
 
-Cada vez que pulsamos F5, estamos copiando hasta las Raspberry un montón de ficheros que se corresponden con las dependencias del proyecto, lo cual lleva mucho tiempo, y ahce un poco desesperante el loop desarrollo - compilación - despliegue - depuración, así que he realizado un cambio sutil, en lugar de un solo fichero .bat de despliegue, he creado 2
+Cada vez que pulsamos F5, estamos copiando hasta las Raspberry un montón de ficheros que se corresponden con las dependencias del proyecto, lo cual lleva mucho tiempo, y hace un poco desesperante el loop desarrollo - compilación - despliegue - depuración, así que he realizado un cambio sutil, en lugar de un solo fichero .bat de despliegue, he creado 2
 
 - [`publish.bat`](https://github.com/Kash0321/remotedebugrpi/blob/master/TestPi.ConsoleApp/publish.bat) tiene un cambio con respecto al original, en lugar de copiar los ficheros con `.\*` lo hace con `.\TestPi` (esto hay que modificarlo en cada proyecto evidentemente), para que copie sólo las dll's correspondientes a nuestro código
 
