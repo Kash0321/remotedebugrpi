@@ -2,7 +2,7 @@
 
 [Volver al readme.md](/readme.md)
 
-Los pasos para poner en marcha la depuración remota los seguí [desde este otro gran post de Scott Hanselman](https://www.hanselman.com/blog/RemoteDebuggingWithVSCodeOnWindowsToARaspberryPiUsingNETCoreOnARM.aspx), así que de nuevo el mérito de este post es traducirlos ...
+Los pasos para poner en marcha la depuración remota los seguí [desde este otro gran post de Scott Hanselman](https://www.hanselman.com/blog/RemoteDebuggingWithVSCodeOnWindowsToARaspberryPiUsingNETCoreOnARM.aspx), así que de nuevo el mérito de esta documentación es traducirlos, detallarlos un poco más, y eso sí, si aguantas hasta el final, dejo de propina una optimización del bucle de trabajo que te facilitará la vida un poco más...
 
 ## En la Raspberry Pi
 
