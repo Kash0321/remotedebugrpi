@@ -178,7 +178,7 @@ Para poder depurar el código, lo primero que tenemos que hacer es publicarlo en
 
     ![](https://user-images.githubusercontent.com/10654401/63650080-da8fb500-c746-11e9-8883-02fa3d0ebb2a.png)
 
-    **launch.json:** Prestad atención a que aquí estamos mezclando directorios locales al equipo de desarrollo y remotos en la Raspberry Pi
+    **launch.json:** Prestad atención a que aquí estamos mezclando directorios locales al equipo de desarrollo y remotos en la Raspberry Pi. Además, fíjate que estamos usando el binario plink.exe, de la instalación de PuTTy para comunicar con la Pi y establecer el canal mediante el que se realiza la depuración remota.
 
     ```json
     {
