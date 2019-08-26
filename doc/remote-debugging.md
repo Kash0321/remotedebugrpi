@@ -10,29 +10,32 @@ Vamos a conectamos por SSH a la Raspberry, y para eso, si no lo hemos hecho ya, 
 
 - Conectando la raspberry a un teclado, ratón y monitor, la forma más visual y cómoda es acceder a las preferencias del sistema y abrir la aplicación de configuración:
 
-    ![RaspiSettingsSSH1](https://user-images.githubusercontent.com/10654401/63646717-7275aa80-c717-11e9-9e61-4c6dfcec3cac.png)
+    ![](https://user-images.githubusercontent.com/10654401/63646717-7275aa80-c717-11e9-9e61-4c6dfcec3cac.png)
 
-    ![RaspiSettingsSSH2](https://user-images.githubusercontent.com/10654401/63646718-75709b00-c717-11e9-8c95-79a5b92663fc.png)
+    ![](https://user-images.githubusercontent.com/10654401/63646718-75709b00-c717-11e9-8c95-79a5b92663fc.png)
 
 - Tenemos una alternativa más linuxera desde la terminal, ejecutando en ella el siguiente comando y usando la aplicación correspondiente:
 
-    ```
+    ```console
     sudo raspi-config
     ```
 
-    ![RaspiSettingsSSHTerm1](https://user-images.githubusercontent.com/10654401/63646795-a7cec800-c718-11e9-9dd0-657270b4ef06.png)
-    ![RaspiSettingsSSHTerm2](https://user-images.githubusercontent.com/10654401/63646796-aac9b880-c718-11e9-956f-a4bcfdc7f66e.png)
+    ![](https://user-images.githubusercontent.com/10654401/63646795-a7cec800-c718-11e9-9dd0-657270b4ef06.png)
+    ![](https://user-images.githubusercontent.com/10654401/63646796-aac9b880-c718-11e9-956f-a4bcfdc7f66e.png)
 
 
 Una vez hecho esto, ya no necesitamos tener conectada la raspberry al monitor, y demás periféricos de entrada/salida, podemos conectarnos a ella vía SSH desde cualquier otro equipo, y para eso, hay muchas formas de hacerlo:
 
 - Desde Windows
-    - Windows 10 incluye cliente de SSH por defecto (desde hace poco) así que bastaría con abrir una consola de línea de comandos y escribir 
-    ```
+    - Windows 10 incluye cliente de SSH por defecto (desde hace poco) así que bastaría con abrir una consola de línea de comandos y escribir :
+
+    ```console
     ssh [usuario en la raspberry]@[IP o nombre del equipo]
     ```
+
     por ejemplo en mi caso, desde mi red local:
-    ```
+
+    ```console
     C:\ssh pi@harlequin
     Linux harlequin 4.19.66-v7+ #1253 SMP Thu Aug 15 11:49:46 BST 2019 armv7l
 
@@ -54,23 +57,24 @@ Una vez hecho esto, ya no necesitamos tener conectada la raspberry al monitor, y
     Last login: Sun Aug 18 15:17:44 2019 from 192.168.1.89
     pi@harlequin:~ $
     ```
+
     - Vía [PuTTy](https://www.putty.org/). Atención porque más adelante vamos a usar uno de los binarios que suele proveer la instalación estándar de PuTTy, para otras tareas.
 
-- Desde linux, prácticamente todas las distribuciones disponen de paquetes de clientes SSH, yo uso Ubuntu y lo trae instalado por defecto, en particular, también se puede hacer usando el WSL de Windows 10
+- Desde Linux, prácticamente todas las distribuciones disponen de paquetes de clientes SSH, yo uso Ubuntu y lo trae instalado por defecto, en particular, también se puede hacer usando el WSL de Windows 10
 
-    ![WSLSSHToRaspi](https://user-images.githubusercontent.com/10654401/63646889-eb760180-c719-11e9-89ba-0b3a4e08347a.png)
+    ![](https://user-images.githubusercontent.com/10654401/63646889-eb760180-c719-11e9-89ba-0b3a4e08347a.png)
 
 Ahora que estamos conectados: 
 
 1. Vamos a instalar el depurador remoto:
 
-    ```
+    ```bash
     curl -sSL https://aka.ms/getvsdbgsh | /bin/sh /dev/stdin -v latest -l ~/vsdbg
     ```
 
     La instalación del VSDbg tiene esta pinta, en el momento en el que la he ejecutado en mi Raspberry Pi:
 
-    ```
+    ```console
     pi@harlequin:~ $ curl -sSL https://aka.ms/getvsdbgsh | /bin/sh /dev/stdin -v latest -l ~/vsdbg
     Info: Creating install directory
     Using arguments
@@ -88,7 +92,7 @@ Ahora que estamos conectados:
 
     En el futuro, para actualizar la versión del depurador remoto, sólo tenéis que ejecutar el comando de nuevo, comprobará si existe una versión nueva y la actualizará. Por ejemplo, si lo ejecutamos ahora otra vez, nos indica que ya tenemos la última versión instalada:
 
-    ```
+    ```console
     pi@harlequin:~ $ curl -sSL https://aka.ms/getvsdbgsh | /bin/sh /dev/stdin -v latest -l ~/vsdbg
     Info: Last installed version of vsdbg is '16.2.10709.2'
     Info: VsDbg is up-to-date
@@ -105,13 +109,13 @@ Ahora que estamos conectados:
 2. Para poder depurar remotamente, necesitamos que este depurador (VSDbg) se ejecute con permisos root en raspbian, para lo cual tenemos que asegurarnos de que el usuario root tiene una contraseña asignada, con el siguiente comando.
 
     
-    ```
+    ```bash
     sudo passwd root
     ```
 
     Durante la ejecución, nos pide la nueva contraseña a establecer al usuario root. Para facilitar la explicación de algunos pasos más adelante, le he asignado como contraseña `raspberry`, recordémosla porque la utilizaremos dentro de un rato.
 
-    ```
+    ```console
     pi@harlequin:~ $ sudo passwd root
     Introduzca la nueva contraseña de UNIX:
     Vuelva a escribir la nueva contraseña de UNIX:
@@ -121,22 +125,24 @@ Ahora que estamos conectados:
 
 3. También tenemos que habilitar las conexiones SSH para el usuario root. Editamos el fichero sshd_config usando nano por ejemplo
 
-    ```
+    ```bash
     sudo nano /etc/ssh/sshd_config
     ```
+
     y le añadimos una línea tal que así:
+
     ```
     PermitRootLogin yes
     ```
 
 4. Por último, reiniciamos la Raspberry Pi
 
-    ```
+    ```bash
     sudo reboot
     ```
 
-
 ## En el equipo con Visual Studio Code instalado
+
 Ya tenemos la Raspberry Pi preparada, vamos ahora con el equipo en el que vamos a trabajar, y que tendrá disponible: 
 
 - [Visual Studio Code](https://code.visualstudio.com), con [la extensión de C#](https://marketplace.visualstudio.com/items?itemName=ms-vscode.csharp) instalada
@@ -153,13 +159,13 @@ Para poder depurar el código, lo primero que tenemos que hacer es publicarlo en
 
 1. Lanzar el comando [`dotnet publish`](https://docs.microsoft.com/es-es/dotnet/core/tools/dotnet-publish) para un entorno de tiempo de ejecución (runtime) específico, en este caso `linux-arm`, que es el entorno de ejecución de la Raspberry Pi, podríamos establecer muchas más opciones, pero si tenemos sincronizados los frameworks por defecto entre el equipo de desarrollo y el de ejecución no va  aser necesario (gustaos todo lo que queráis...). Este comando compila la aplicación, lee sus dependencias especificadas en el archivo de proyecto y publica el conjunto resultante de archivos en un directorio.
 
-    ```
+    ```bat
     dotnet publish -r linux-arm
     ```
 
-2. Enviar, vía copia segura, el resultado de la publicación anterior, al un directorio del dispositivo que lo va a ejecutar. Aquí hay muuuchas opciones, una de las más sencillas es usar pushd / popd para gestionar el directorio de trabajo y devolverlo al estado anterior una vez ejecutado lo que queremos, y usar el binario desplegado con PuTTy que hemos mencionado anteriormente pscp.exe para enviar el contenido. Como todo esto lo vamos a taner que ejecutar n veces (cada vez que modifiquemos el código y queramos depurarlo), lo colocamos todo en un fichero [```publish.bat```](https://github.com/Kash0321/remotedebugrpi/blob/master/TestPi.ConsoleApp/publish.bat) 
+2. Enviar, vía copia segura, el resultado de la publicación anterior, al un directorio del dispositivo que lo va a ejecutar. Aquí hay muuuchas opciones, una de las más sencillas es usar pushd / popd para gestionar el directorio de trabajo y devolverlo al estado anterior una vez ejecutado lo que queremos, y usar el binario desplegado con PuTTy que hemos mencionado anteriormente pscp.exe para enviar el contenido. Como todo esto lo vamos a taner que ejecutar n veces (cada vez que modifiquemos el código y queramos depurarlo), lo colocamos todo en un fichero [```publish.bat```](https://github.com/Kash0321/remotedebugrpi/blob/master/TestPi.ConsoleApp/publish.bat)
 
-    ```
+    ```bat
     dotnet publish -r linux-arm /p:ShowLinkerSizeComparison=true 
     pushd .\bin\Debug\netcoreapp2.2\linux-arm\publish
     c:\work\putty\pscp -pw harlequin -v -r .\* pi@harlequin.local:/home/pi/Work/dotnet/TestPi.ConsoleApp
@@ -168,9 +174,9 @@ Para poder depurar el código, lo primero que tenemos que hacer es publicarlo en
 
 3. Ahora tenemos que añadir dos cosas a la carpeta `.vscode` dentro del proyecto, un fichero `launch.json` para configurar la preparación de la depuración y algunas tareas en el fichero `tasks.json` para gestionarlo todo (VSCode lo suele generar automáticamente cuando intentas depurar vía -F5- una aplicación) 
 
-    ![configfiles](https://user-images.githubusercontent.com/10654401/63650065-a3210880-c746-11e9-815e-dc6347388c47.png)
+    ![](https://user-images.githubusercontent.com/10654401/63650065-a3210880-c746-11e9-815e-dc6347388c47.png)
 
-    ![configfiles2](https://user-images.githubusercontent.com/10654401/63650080-da8fb500-c746-11e9-8883-02fa3d0ebb2a.png)
+    ![](https://user-images.githubusercontent.com/10654401/63650080-da8fb500-c746-11e9-8883-02fa3d0ebb2a.png)
 
     **launch.json:** Prestad atención a que aquí estamos mezclando directorios locales al equipo de desarrollo y remotos en la Raspberry Pi
 
@@ -239,11 +245,11 @@ Para poder depurar el código, lo primero que tenemos que hacer es publicarlo en
     }
     ```
 
-## Resultado final!!
+## ¡Resultado final!
 
 El efecto final de esto, es que cuando queremos depurar nuestro código, pulsamos F5, el código se compila, publica, se envía a la Raspberry Pi y se inicia la depuración remota, como por arte de magia...
 
-![image](https://user-images.githubusercontent.com/10654401/63650685-aa97e000-c74d-11e9-9e3e-fe922af7fc69.png)
+![](https://user-images.githubusercontent.com/10654401/63650685-aa97e000-c74d-11e9-9e3e-fe922af7fc69.png)
 
 ## Y una optimización de regalo
 
@@ -253,7 +259,7 @@ Cada vez que pulsamos F5, estamos copiando hasta las Raspberry un montón de fic
 
 - [`publish.bat`](https://github.com/Kash0321/remotedebugrpi/blob/master/TestPi.ConsoleApp/publish.bat) tiene un cambio con respecto al original, en lugar de copiar los ficheros con `.\*` lo hace con `.\TestPi` (esto hay que modificarlo en cada proyecto evidentemente), para que copie sólo las dll's correspondientes a nuestro código
 
-    ```
+    ```bat
     dotnet publish -r linux-arm /p:ShowLinkerSizeComparison=true 
     pushd .\bin\Debug\netcoreapp2.2\linux-arm\publish
     c:\work\putty\pscp -pw harlequin -v -r .\TestPi* pi@harlequin.local:/home/pi/Work/dotnet/TestPi.ConsoleApp
@@ -262,7 +268,7 @@ Cada vez que pulsamos F5, estamos copiando hasta las Raspberry un montón de fic
 
 - [`republish.bat`](https://github.com/Kash0321/remotedebugrpi/blob/master/TestPi.ConsoleApp/republish.bat): se correponde con el `publish.bat` original
 
-    ```
+    ```bat
     dotnet publish -r linux-arm /p:ShowLinkerSizeComparison=true 
     pushd .\bin\Debug\netcoreapp2.2\linux-arm\publish
     c:\work\putty\pscp -pw harlequin -v -r .\* pi@harlequin.local:/home/pi/Work/dotnet/TestPi.ConsoleApp
@@ -372,9 +378,7 @@ Cada vez que pulsamos F5, estamos copiando hasta las Raspberry un montón de fic
         ]
     }
     ```
+
 Ahora desde la pestaña de depuración de VS Code, podemos seleccionar el modo de publicación o republicación, y con el primero, nos evitamos un montón de tiempo en cada iteración del loop de desarrollo - compilación - despliegue - depuración:
 
-![image](https://user-images.githubusercontent.com/10654401/63650948-8d184580-c750-11e9-801e-c8c7d41cac03.png)
-
-
-
+![](https://user-images.githubusercontent.com/10654401/63650948-8d184580-c750-11e9-801e-c8c7d41cac03.png)
